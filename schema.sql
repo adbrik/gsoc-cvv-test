@@ -1,0 +1,21 @@
+CREATE TABLE posts (
+    Id INTEGER, 
+    PostTypeId INTEGER, 
+    ParentId INTEGER, 
+    CreationDate TEXT, 
+    Score INTEGER, 
+    Body TEXT, 
+    OwnerUserId INTEGER, 
+    LastEditorUserId INTEGER, 
+    LastEditDate TEXT, 
+    LastActivityDate TEXT, 
+    CommentCount INTEGER,
+    FavoriteCount INTEGER,
+    AnswerCount INTEGER,
+    ViewCount INTEGER,
+    AcceptedAnswerId INTEGER,
+    Tags TEXT,
+    Title TEXT,
+    ClosedDate TEXT,
+    OwnerDisplayName TEXT
+);
