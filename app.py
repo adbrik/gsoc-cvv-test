@@ -13,11 +13,15 @@ app.config.from_pyfile('config.py')
 
 #Get's the Database Connection
 
+def make_dicts(cursor, row):
+    return dict((cursor.description[idx][0], value)
+                for idx, value in enumerate(row))
+
 def get_db():
     db = getattr(Flask, '_database', None)
     if db is None:
         db = Flask._database = sqlite3.connect(DATABASE)
-    db.row_factory = sqlite3.Row
+    db.row_factory = make_dicts
     return db
 
 #Query's the database
@@ -49,10 +53,7 @@ def show_posts():
             SQLquerystring = "SELECT * FROM posts ORDER BY Score DESC"
     with app.app_context():
         post = query_db(SQLquerystring)
-        for p in post:
-            if "Drawing" in p['Title']:
-                print(p['Title'])
-        return flask.jsonify([[a for a in p] for p in post])
+        return flask.jsonify(post)
 
 @app.route('/postsearch')
 def search_posts():
@@ -64,10 +65,9 @@ def search_posts():
     with app.app_context():
         posts = query_db(SQLquerystring)
         if isThereSearchTerm is True:
-            return ("Something!")
-
+            return flask.jsonify([{k:v for (k,v) in post.items()} for post in posts if (searchterm in post['Body'] or searchterm in post['Title'])])
         else:
-            return flask.jsonify([[attribute for attribute in post] for post in posts])
+            return flask.jsonify(posts)
 
 #Builds the database, and adds the xml to 
 
